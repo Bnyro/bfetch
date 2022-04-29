@@ -1,0 +1,80 @@
+#!/bin/bash
+
+### Forked by nerdfetch, ufetch, pfetch & rxfetch
+
+## SYSTEM INFORMATION
+
+has() {
+	(command -v "$1") &>/dev/null
+}
+
+get_os() {
+	awk -F '"' '/PRETTY_NAME/ { print $2 }' /etc/os-release
+}
+
+get_kernel() {
+	uname -r | cut -d - -f 1
+}
+
+get_de() {
+	echo ${XDG_CURRENT_DESKTOP:-${DESKTOP_SESSION:-unknown}}
+}
+
+get_storage() {
+	df -h --output=used,size / | awk 'NR == 2 { print $1 }'
+}
+
+get_ram() {
+	free -h | awk 'NR == 2 { print $3" / "$2 }' | sed 's/i//g'
+}
+
+get_uptime() {
+	s=$(</proc/uptime) && s=${s//.*/}
+	d=$((s / 60 / 60 / 24)) && [ $d != 0 ] && printf "${d}d "
+	h=$((s / 60 / 60 % 24)) && [ $h != 0 ] && printf "${h}h "
+	m=$((s / 60 % 60)) && [ $m != 0 ] && printf "${m}m "
+	[ $d == 0 ] && [ $h == 0 ] && [ $m == 0 ] && printf 0m
+}
+
+get_packages() {
+	(
+		has pacman && pacman -Q
+		has dpkg && dpkg --list
+		has dnf && dnf list installed
+	) | wc -l
+}
+
+## DEFINE COLORS
+
+if has tput; then
+	bold=$(tput bold)
+	black=$(tput setaf 0)
+	red=$(tput setaf 1)
+	green=$(tput setaf 2)
+	yellow=$(tput setaf 3)
+	blue=$(tput setaf 4)
+	magenta=$(tput setaf 5)
+	cyan=$(tput setaf 6)
+	white=$(tput setaf 7)
+	reset=$(tput sgr0)
+fi
+
+lc=${bold}${cyan}    # labels
+nc=${bold}${magenta} # user and hostname
+ic=${reset}          # info
+c0=${blue}           # first color
+c1=${cyan}           # second color
+
+## PRINT OUTPUT
+
+cat <<EOF
+
+${c0}       /\\         ${nc}${USER,,}@$(</etc/hostname)
+${c0}      /  \\        ${lc}OS:        ${ic}$(get_os)
+${c0}     /\\   \\       ${lc}KERNEL:    ${ic}$(get_kernel)
+${c0}    /      \\      ${lc}UPTIME:    ${ic}$(get_uptime)
+${c1}   /   ,,   \\     ${lc}PACKAGES:  ${ic}$(get_packages)
+${c1}  /   |  |  -\\    ${lc}DISK:      ${ic}$(get_storage)
+${c1} /_-''    ''-_\\   ${lc}DE:        ${ic}$(get_de)        
+
+EOF
