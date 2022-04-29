@@ -1,6 +1,6 @@
 # bfetch
 
-Simple System Info Fetch written in Bash to work on Linux devices\
+Simple System Info Script to run on terminal startup written in Bash\
 ASCII credits go to pfetch by dylanaraps
 
 ## Demo
