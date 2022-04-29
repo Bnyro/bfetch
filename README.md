@@ -1,15 +1,13 @@
-## bfetch
+# bfetch
 
-```
-Simple System Info Fetch written in Bash
-ASCII credits go to bfetch
-```
-# Demo
+Simple System Info Fetch written in Bash to work on Linux devices\
+ASCII credits go to pfetch by dylanaraps
+
+## Demo
 
 ![demo](demo.png)
 
-
-# Installation
+## Installation
 
 ```
 git clone https://github.com/Bnyro/bfetch.git
