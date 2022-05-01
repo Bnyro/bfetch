@@ -6,7 +6,7 @@ ASCII credits go to pfetch and ufetch
 
 ## Demo
 
-![demo](demo.png)
+![demo](assets/demo.png)
 
 ## Installation
 
