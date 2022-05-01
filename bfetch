@@ -47,6 +47,7 @@ get_packages() {
 ## DEFINE COLORS
 
 if has tput; then
+	reset=$(tput sgr0)
 	bold=$(tput bold)
 	black=$(tput setaf 0)
 	red=$(tput setaf 1)
@@ -56,14 +57,15 @@ if has tput; then
 	magenta=$(tput setaf 5)
 	cyan=$(tput setaf 6)
 	white=$(tput setaf 7)
-	reset=$(tput sgr0)
 fi
+
+if [ "$(get_os)" == "Arch Linux" ]; then
 
 lc=${bold}${cyan}    # labels
 nc=${bold}${magenta} # user and hostname
-ic=${reset}          # info
-c0=${blue}           # first color
-c1=${cyan}           # second color
+ic=${reset}   		 # info
+c0=${reset}${blue}   # first color
+c1=${reset}${cyan}	 # second color
 
 ## PRINT OUTPUT
 
@@ -75,6 +77,27 @@ ${c0}     /\\   \\       ${lc}KERNEL:    ${ic}$(get_kernel)
 ${c0}    /      \\      ${lc}UPTIME:    ${ic}$(get_uptime)
 ${c1}   /   ,,   \\     ${lc}PACKAGES:  ${ic}$(get_packages)
 ${c1}  /   |  |  -\\    ${lc}DISK:      ${ic}$(get_storage)
-${c1} /_-''    ''-_\\   ${lc}DE:        ${ic}$(get_de)        
+${c1} /_-''    ''-_\\   ${lc}DE:        ${ic}$(get_de)
 
 EOF
+
+else
+
+ic=${reset}${bold}		# info
+c0=${black}		# first color
+c1=${white}		# second color
+c2=${yellow}	# third color
+
+cat <<EOF
+
+${c0}      ___      ${magenta}${bold}${USER,,}@$(</etc/hostname)
+${c0}     (${c1}.. ${c0}\     ${green}os        ${ic}$(get_os)
+${c0}     (${c2}<> ${c0}|     ${cyan}kernel    ${ic}$(get_kernel)
+${c0}    /${c1}/  \\ ${c0}\\    ${blue}uptime    ${ic}$(get_uptime)
+${c0}   ( ${c1}|  | ${c0}/|   ${yellow}packages  ${ic}$(get_packages)
+${c2}  _${c0}/\\ ${c1}__)${c0}/${c2}_${c0})   ${red}disk      ${ic}$(get_storage)
+${c2}  \/${c0}-____${c2}\/${reset}    ${green}de        ${ic}$(get_de)
+${reset}
+EOF
+
+fi
