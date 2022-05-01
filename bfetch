@@ -2,7 +2,7 @@
 
 ### Forked by nerdfetch, ufetch, pfetch & rxfetch
 
-## SYSTEM INFORMATION
+## GET SYSTEM INFORMATION
 
 has() {
 	(command -v "$1") &>/dev/null
@@ -59,34 +59,12 @@ if has tput; then
 	white=$(tput setaf 7)
 fi
 
-if [ "$(get_os)" == "Arch Linux" ]; then
-
-lc=${bold}${cyan}    # labels
-nc=${bold}${magenta} # user and hostname
-ic=${reset}   		 # info
-c0=${reset}${blue}   # first color
-c1=${reset}${cyan}	 # second color
+ic=${reset}${bold}		# info
+c0=${black}				# first color
+c1=${white}				# second color
+c2=${yellow}			# third color
 
 ## PRINT OUTPUT
-
-cat <<EOF
-
-${c0}       /\\         ${nc}${USER,,}@$(</etc/hostname)
-${c0}      /  \\        ${lc}OS:        ${ic}$(get_os)
-${c0}     /\\   \\       ${lc}KERNEL:    ${ic}$(get_kernel)
-${c0}    /      \\      ${lc}UPTIME:    ${ic}$(get_uptime)
-${c1}   /   ,,   \\     ${lc}PACKAGES:  ${ic}$(get_packages)
-${c1}  /   |  |  -\\    ${lc}DISK:      ${ic}$(get_storage)
-${c1} /_-''    ''-_\\   ${lc}DE:        ${ic}$(get_de)
-
-EOF
-
-else
-
-ic=${reset}${bold}		# info
-c0=${black}		# first color
-c1=${white}		# second color
-c2=${yellow}	# third color
 
 cat <<EOF
 
@@ -99,5 +77,3 @@ ${c2}  _${c0}/\\ ${c1}__)${c0}/${c2}_${c0})   ${red}disk      ${ic}$(get_storage
 ${c2}  \/${c0}-____${c2}\/${reset}    ${green}de        ${ic}$(get_de)
 ${reset}
 EOF
-
-fi
