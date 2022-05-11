@@ -33,7 +33,7 @@ get_uptime() {
 	d=$((s / 60 / 60 / 24)) && [ $d != 0 ] && printf "${d}d "
 	h=$((s / 60 / 60 % 24)) && [ $h != 0 ] && printf "${h}h "
 	m=$((s / 60 % 60)) && [ $m != 0 ] && printf "${m}m "
-	[ $d == 0 ] && [ $h == 0 ] && [ $m == 0 ] && printf 0m
+	((s / 60 == 0) && printf 0m
 }
 
 get_packages() {
